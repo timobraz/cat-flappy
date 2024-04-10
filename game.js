@@ -1,12 +1,15 @@
 const RAD = Math.PI / 180;
 const scrn = document.getElementById("canvas");
 const sctx = scrn.getContext("2d");
+
 scrn.tabIndex = 1;
 scrn.addEventListener("click", () => {
   switch (state.curr) {
     case state.getReady:
       state.curr = state.Play;
       SFX.start.play();
+      const audio = document.getElementById("audio");
+      audio.play();
       break;
     case state.Play:
       bird.flap();
@@ -87,18 +90,14 @@ const bg = {
 const pipe = {
   top: { sprite: new Image() },
   bot: { sprite: new Image() },
-  gap: 85,
+  gap: 120,
   moved: true,
   pipes: [],
   draw: function () {
     for (let i = 0; i < this.pipes.length; i++) {
       let p = this.pipes[i];
       sctx.drawImage(this.top.sprite, p.x, p.y);
-      sctx.drawImage(
-        this.bot.sprite,
-        p.x,
-        p.y + parseFloat(this.top.sprite.height) + this.gap
-      );
+      sctx.drawImage(this.bot.sprite, p.x, p.y + parseFloat(this.top.sprite.height) + this.gap);
     }
   },
   update: function () {
@@ -120,12 +119,7 @@ const pipe = {
   },
 };
 const bird = {
-  animations: [
-    { sprite: new Image() },
-    { sprite: new Image() },
-    { sprite: new Image() },
-    { sprite: new Image() },
-  ],
+  animations: [{ sprite: new Image() }, { sprite: new Image() }, { sprite: new Image() }, { sprite: new Image() }],
   rotatation: 0,
   x: 50,
   y: 100,
@@ -235,8 +229,7 @@ const UI = {
         this.y = parseFloat(scrn.height - this.getReady.sprite.height) / 2;
         this.x = parseFloat(scrn.width - this.getReady.sprite.width) / 2;
         this.tx = parseFloat(scrn.width - this.tap[0].sprite.width) / 2;
-        this.ty =
-          this.y + this.getReady.sprite.height - this.tap[0].sprite.height;
+        this.ty = this.y + this.getReady.sprite.height - this.tap[0].sprite.height;
         sctx.drawImage(this.getReady.sprite, this.x, this.y);
         sctx.drawImage(this.tap[this.frame].sprite, this.tx, this.ty);
         break;
@@ -244,8 +237,7 @@ const UI = {
         this.y = parseFloat(scrn.height - this.gameOver.sprite.height) / 2;
         this.x = parseFloat(scrn.width - this.gameOver.sprite.width) / 2;
         this.tx = parseFloat(scrn.width - this.tap[0].sprite.width) / 2;
-        this.ty =
-          this.y + this.gameOver.sprite.height - this.tap[0].sprite.height;
+        this.ty = this.y + this.gameOver.sprite.height - this.tap[0].sprite.height;
         sctx.drawImage(this.gameOver.sprite, this.x, this.y);
         sctx.drawImage(this.tap[this.frame].sprite, this.tx, this.ty);
         break;
@@ -267,10 +259,7 @@ const UI = {
         sctx.font = "40px Squada One";
         let sc = `SCORE :     ${this.score.curr}`;
         try {
-          this.score.best = Math.max(
-            this.score.curr,
-            localStorage.getItem("best")
-          );
+          this.score.best = Math.max(this.score.curr, localStorage.getItem("best"));
           localStorage.setItem("best", this.score.best);
           let bs = `BEST  :     ${this.score.best}`;
           sctx.fillText(sc, scrn.width / 2 - 80, scrn.height / 2 + 0);
@@ -324,7 +313,7 @@ function update() {
 }
 
 function draw() {
-  sctx.fillStyle = "#30c0df";
+  sctx.fillStyle = "#5b237c";
   sctx.fillRect(0, 0, scrn.width, scrn.height);
   bg.draw();
   pipe.draw();
